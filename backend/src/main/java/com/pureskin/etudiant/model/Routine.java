@@ -21,7 +21,12 @@ public class Routine {
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    private Long skinTypeId;
+    private String image;
+
+    private String skinType;
+
+    @Column(columnDefinition = "TEXT")
+    private String skinConcerns;
 
     @Column(columnDefinition = "TEXT")
     private String steps;
@@ -30,8 +35,13 @@ public class Routine {
 
     private String difficultyLevel;
 
+    @Column(columnDefinition = "TEXT")
+    private String productsNeeded;
+
     @Column(nullable = false)
     private Boolean isRecommended = false;
+
+    private Integer viewCount = 0;
 
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -59,8 +69,14 @@ public class Routine {
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
-    public Long getSkinTypeId() { return skinTypeId; }
-    public void setSkinTypeId(Long skinTypeId) { this.skinTypeId = skinTypeId; }
+    public String getImage() { return image; }
+    public void setImage(String image) { this.image = image; }
+
+    public String getSkinType() { return skinType; }
+    public void setSkinType(String skinType) { this.skinType = skinType; }
+
+    public String getSkinConcerns() { return skinConcerns; }
+    public void setSkinConcerns(String skinConcerns) { this.skinConcerns = skinConcerns; }
 
     public String getSteps() { return steps; }
     public void setSteps(String steps) { this.steps = steps; }
@@ -71,8 +87,14 @@ public class Routine {
     public String getDifficultyLevel() { return difficultyLevel; }
     public void setDifficultyLevel(String difficultyLevel) { this.difficultyLevel = difficultyLevel; }
 
+    public String getProductsNeeded() { return productsNeeded; }
+    public void setProductsNeeded(String productsNeeded) { this.productsNeeded = productsNeeded; }
+
     public Boolean getIsRecommended() { return isRecommended; }
     public void setIsRecommended(Boolean isRecommended) { this.isRecommended = isRecommended; }
+
+    public Integer getViewCount() { return viewCount; }
+    public void setViewCount(Integer viewCount) { this.viewCount = viewCount; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

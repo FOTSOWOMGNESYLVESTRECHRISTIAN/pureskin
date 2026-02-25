@@ -16,7 +16,10 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Étape 2: Runtime avec OpenJDK
-FROM openjdk:17-jre-slim
+FROM openjdk:17-jdk-slim
+
+# Installer wget pour les health checks
+RUN apt-get update && apt-get install -y wget && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 

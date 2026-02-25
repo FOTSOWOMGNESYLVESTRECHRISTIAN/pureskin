@@ -15,8 +15,7 @@ public interface RoutineRepository extends JpaRepository<Routine, Long> {
     
     Routine findBySlug(String slug);
     
-    @Query("SELECT r FROM Routine r WHERE r.skinTypeId = :skinTypeId OR r.skinTypeId IS NULL")
-    List<Routine> findBySkinTypeIdOrGeneral(@Param("skinTypeId") Long skinTypeId);
+    List<Routine> findBySkinTypeOrderByCreatedAtDesc(String skinType);
     
     List<Routine> findByDifficultyLevelOrderByCreatedAtAsc(String difficultyLevel);
     

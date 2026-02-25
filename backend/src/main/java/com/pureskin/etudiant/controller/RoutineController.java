@@ -43,9 +43,9 @@ public class RoutineController {
         return ResponseEntity.notFound().build();
     }
     
-    @GetMapping("/skin-type/{skinTypeId}")
-    public List<Routine> getRoutinesBySkinType(@PathVariable Long skinTypeId) {
-        return routineRepository.findBySkinTypeIdOrGeneral(skinTypeId);
+    @GetMapping("/skin-type/{skinType}")
+    public List<Routine> getRoutinesBySkinType(@PathVariable String skinType) {
+        return routineRepository.findBySkinTypeOrderByCreatedAtDesc(skinType);
     }
     
     @GetMapping("/difficulty/{level}")
@@ -66,11 +66,15 @@ public class RoutineController {
             existingRoutine.setName(routineDetails.getName());
             existingRoutine.setSlug(routineDetails.getSlug());
             existingRoutine.setDescription(routineDetails.getDescription());
-            existingRoutine.setSkinTypeId(routineDetails.getSkinTypeId());
+            existingRoutine.setImage(routineDetails.getImage());
+            existingRoutine.setSkinType(routineDetails.getSkinType());
+            existingRoutine.setSkinConcerns(routineDetails.getSkinConcerns());
             existingRoutine.setSteps(routineDetails.getSteps());
             existingRoutine.setDurationMinutes(routineDetails.getDurationMinutes());
             existingRoutine.setDifficultyLevel(routineDetails.getDifficultyLevel());
+            existingRoutine.setProductsNeeded(routineDetails.getProductsNeeded());
             existingRoutine.setIsRecommended(routineDetails.getIsRecommended());
+            existingRoutine.setViewCount(routineDetails.getViewCount());
             return ResponseEntity.ok(routineRepository.save(existingRoutine));
         }
         return ResponseEntity.notFound().build();
