@@ -39,6 +39,8 @@ public class Testimonial {
     @Column(nullable = false)
     private Boolean isApproved = false;
 
+    private Integer helpfulCount = 0;
+
     @Column(updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -80,6 +82,9 @@ public class Testimonial {
 
     public Boolean getIsApproved() { return isApproved; }
     public void setIsApproved(Boolean isApproved) { this.isApproved = isApproved; }
+
+    public Integer getHelpfulCount() { return helpfulCount; }
+    public void setHelpfulCount(Integer helpfulCount) { this.helpfulCount = helpfulCount; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
