@@ -124,4 +124,13 @@ public class OrderItem {
     public void setCreatedAt(java.time.LocalDateTime createdAt) {
         this.createdAt = createdAt;
     }
+    
+    // Additional methods for customer information
+    public String getCustomerName() {
+        return order != null ? order.getCustomerName() : null;
+    }
+    
+    public String getCustomerEmail() {
+        return order != null ? order.getCustomerEmail() : null;
+    }
 }

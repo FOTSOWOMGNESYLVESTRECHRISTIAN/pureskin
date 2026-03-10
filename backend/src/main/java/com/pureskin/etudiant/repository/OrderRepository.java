@@ -72,4 +72,17 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
            "AVG(o.totalAmount) as averageOrderValue " +
            "FROM Order o WHERE o.paymentStatus = 'paid'")
     Object[] getOrderStatistics();
+    
+    // Compter les commandes créées après une date
+    Long countByCreatedAtAfter(LocalDateTime date);
+    
+    // Calculer le revenu depuis une date
+    @Query("SELECT COALESCE(SUM(o.totalAmount), 0) FROM Order o WHERE o.createdAt >= :date AND o.paymentStatus = 'paid'")
+    Double calculateRevenueSince(@Param("date") LocalDateTime date);
+    
+    // Pagination avec tri
+    org.springframework.data.domain.Page<Order> findAll(org.springframework.data.domain.Pageable pageable);
+    
+    // Trouver par statut avec pagination
+    org.springframework.data.domain.Page<Order> findByStatus(String status, org.springframework.data.domain.Pageable pageable);
 }

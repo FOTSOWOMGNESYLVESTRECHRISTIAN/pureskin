@@ -14,9 +14,23 @@ import java.util.Map;
 @Repository
 public interface TestimonialRepository extends JpaRepository<Testimonial, Long> {
     
+    List<Testimonial> findByIsApproved(Boolean isApproved);
+    
     List<Testimonial> findByIsApprovedOrderByCreatedAtDesc(Boolean isApproved);
     
     Page<Testimonial> findByIsApprovedOrderByCreatedAtDesc(Boolean isApproved, Pageable pageable);
+    
+    List<Testimonial> findByRating(Integer rating);
+    
+    List<Testimonial> findByProductName(String productName);
+    
+    @Query("SELECT COALESCE(AVG(t.rating), 0.0) FROM Testimonial t WHERE t.isApproved = true")
+    Double calculateAverageRating();
+    
+    @Query("SELECT t FROM Testimonial t WHERE t.isApproved = true ORDER BY t.createdAt DESC")
+    List<Testimonial> findRecentTestimonials();
+    
+    Page<Testimonial> findByIsApproved(Boolean isApproved, Pageable pageable);
     
     @Query("SELECT t FROM Testimonial t WHERE t.isApproved = true ORDER BY RANDOM()")
     List<Testimonial> findRandomApprovedTestimonials();

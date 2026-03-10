@@ -18,6 +18,12 @@ public class Order {
     @Column(name = "customer_id")
     private Long customerId;
     
+    @Column(name = "customer_name")
+    private String customerName;
+    
+    @Column(name = "customer_email")
+    private String customerEmail;
+    
     @Column(name = "status", nullable = false)
     private String status;
     
@@ -54,15 +60,21 @@ public class Order {
     @Column(name = "notes")
     private String notes;
     
-    // Champs Faroty ajoutés (temporairement en commentaire pour tester)
-    // @Column(name = "wallet_id")
-    // private String walletId;
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
     
-    // @Column(name = "session_token")
-    // private String sessionToken;
+    @Column(name = "delivered_at")
+    private LocalDateTime deliveredAt;
     
-    // @Column(name = "faroty_user_id")
-    // private String farotyUserId;
+    // Champs Faroty
+    @Column(name = "wallet_id")
+    private String walletId;
+    
+    @Column(name = "session_token")
+    private String sessionToken;
+    
+    @Column(name = "faroty_user_id")
+    private String farotyUserId;
     
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -73,8 +85,9 @@ public class Order {
     @Column(name = "shipped_at")
     private LocalDateTime shippedAt;
     
-    @Column(name = "delivered_at")
-    private LocalDateTime deliveredAt;
+    // Relation avec les items de commande
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<OrderItem> orderItems = new java.util.ArrayList<>();
     
     // Constructors
     public Order() {
@@ -156,6 +169,22 @@ public class Order {
     
     public void setCustomerId(Long customerId) {
         this.customerId = customerId;
+    }
+    
+    public String getCustomerName() {
+        return customerName;
+    }
+    
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
+    }
+    
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+    
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
     }
     
     public String getStatus() {
@@ -254,8 +283,7 @@ public class Order {
         this.notes = notes;
     }
     
-    // Getters et setters Faroty (temporairement en commentaire pour tester)
-    /*
+    // Getters et setters Faroty
     public String getWalletId() {
         return walletId;
     }
@@ -279,7 +307,6 @@ public class Order {
     public void setFarotyUserId(String farotyUserId) {
         this.farotyUserId = farotyUserId;
     }
-    */
     
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -297,6 +324,14 @@ public class Order {
         this.updatedAt = updatedAt;
     }
     
+    public java.util.List<OrderItem> getOrderItems() {
+        return orderItems;
+    }
+    
+    public void setOrderItems(java.util.List<OrderItem> orderItems) {
+        this.orderItems = orderItems;
+    }
+    
     public LocalDateTime getShippedAt() {
         return shippedAt;
     }
@@ -311,5 +346,13 @@ public class Order {
     
     public void setDeliveredAt(LocalDateTime deliveredAt) {
         this.deliveredAt = deliveredAt;
+    }
+    
+    public LocalDateTime getPaidAt() {
+        return paidAt;
+    }
+    
+    public void setPaidAt(LocalDateTime paidAt) {
+        this.paidAt = paidAt;
     }
 }

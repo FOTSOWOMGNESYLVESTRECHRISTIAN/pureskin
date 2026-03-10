@@ -6,12 +6,20 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.Arrays;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        // Servir les images uploadées depuis le répertoire uploads/products
+        registry.addResourceHandler("/api/admin/products/images/**")
+                .addResourceLocations("file:uploads/products/");
+    }
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {

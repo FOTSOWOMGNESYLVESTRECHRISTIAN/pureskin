@@ -18,6 +18,9 @@ public class Product {
     @Column(nullable = false)
     private String name;
 
+    @Column(unique = true, nullable = false)
+    private String slug;
+
     @Column(columnDefinition = "TEXT")
     private String description;
 
@@ -30,8 +33,15 @@ public class Product {
     private BigDecimal originalPrice;
 
     private String image;
+    
+    @Column(name = "image_url")
+    private String imageUrl;
 
     private String badge;
+
+    private String category;
+
+    private Boolean isPromotional = false;
 
     @Column(nullable = false)
     private Integer stockQuantity = 0;
@@ -60,6 +70,9 @@ public class Product {
     public String getName() { return name; }
     public void setName(String name) { this.name = name; }
 
+    public String getSlug() { return slug; }
+    public void setSlug(String slug) { this.slug = slug; }
+
     public String getDescription() { return description; }
     public void setDescription(String description) { this.description = description; }
 
@@ -75,11 +88,26 @@ public class Product {
     public String getBadge() { return badge; }
     public void setBadge(String badge) { this.badge = badge; }
 
+    public String getCategory() { return category; }
+    public void setCategory(String category) { this.category = category; }
+
+    public Boolean getIsPromotional() { return isPromotional; }
+    public void setIsPromotional(Boolean isPromotional) { this.isPromotional = isPromotional; }
+
     public Integer getStockQuantity() { return stockQuantity; }
     public void setStockQuantity(Integer stockQuantity) { this.stockQuantity = stockQuantity; }
 
+    public Integer getStock() { return stockQuantity; }
+    public void setStock(Integer stock) { this.stockQuantity = stock; }
+
     public Boolean getIsActive() { return isActive; }
     public void setIsActive(Boolean isActive) { this.isActive = isActive; }
+    
+    public Boolean getActive() { return isActive; }
+    public void setActive(Boolean active) { this.isActive = active; }
+    
+    public String getImageUrl() { return imageUrl; }
+    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

@@ -398,6 +398,88 @@ INSERT INTO faqs (question, answer, category, subcategory, is_active, sort_order
 ('Comment passer commande ?', 'Simple en 3 étapes : 1) Choisissez vos produits et ajoutez au panier, 2) Créez votre compte ou connectez-vous, 3) Choisissez livraison et paiement. La commande prend 2 minutes maximum !', 'Commandes', 'Processus', true, 4),
 ('Quels sont les délais de livraison ?', 'Livraison Standard : 3-5 jours ouvrés (4,99€), Express : 24-48h (9,99€), Point Relais : 2-4 jours (3,99€), Mondial Relay : 4-6 jours (2,99€). Livraison offerte dès 25€ d''achat !', 'Livraison', 'Délais', true, 5);
 
+-- Table utilisateurs pour l'administration
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    username VARCHAR(50) UNIQUE NOT NULL,
+    email VARCHAR(100) UNIQUE NOT NULL,
+    password_hash VARCHAR(255) NOT NULL,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    role VARCHAR(20) DEFAULT 'user' CHECK (role IN ('user', 'admin')),
+    is_active BOOLEAN DEFAULT true,
+    last_login TIMESTAMP,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour optimisation
+CREATE INDEX idx_users_email ON users(email);
+CREATE INDEX idx_users_username ON users(username);
+CREATE INDEX idx_users_role ON users(role);
+
+-- Trigger pour mettre à jour updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER update_users_updated_at 
+    BEFORE UPDATE ON users 
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- Insertion de l'administrateur par défaut
+-- Mot de passe: admin123 (hashé avec bcrypt)
+INSERT INTO users (username, email, password_hash, first_name, last_name, role, is_active) VALUES
+('admin', 'admin@pureskin-etu.com', '$2b$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewdBPj3QJgusgq4G', 'Admin', 'PureSkin', 'admin', true);
+
+-- Table sessions pour la gestion des connexions
+CREATE TABLE user_sessions (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    session_token VARCHAR(255) UNIQUE NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ip_address INET,
+    user_agent TEXT
+);
+
+-- Index pour les sessions
+CREATE INDEX idx_sessions_token ON user_sessions(session_token);
+CREATE INDEX idx_sessions_user_id ON user_sessions(user_id);
+CREATE INDEX idx_sessions_expires_at ON user_sessions(expires_at);
+
+-- Fonction de nettoyage des sessions expirées
+CREATE OR REPLACE FUNCTION cleanup_expired_sessions()
+RETURNS void AS $$
+BEGIN
+    DELETE FROM user_sessions WHERE expires_at < CURRENT_TIMESTAMP;
+END;
+$$ LANGUAGE plpgsql;
+
+-- Table logs d'administration
+CREATE TABLE admin_logs (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users(id) ON DELETE SET NULL,
+    action VARCHAR(100) NOT NULL,
+    entity_type VARCHAR(50),
+    entity_id INTEGER,
+    old_values JSONB,
+    new_values JSONB,
+    ip_address INET,
+    user_agent TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Index pour les logs
+CREATE INDEX idx_admin_logs_user_id ON admin_logs(user_id);
+CREATE INDEX idx_admin_logs_action ON admin_logs(action);
+CREATE INDEX idx_admin_logs_created_at ON admin_logs(created_at);
+
 -- Récompenses fidélité
 INSERT INTO loyalty_rewards (title, description, points_required, category, is_active, is_popular, sort_order) VALUES
 ('-10% sur votre prochaine commande', 'Valable 3 mois sur tous les produits', 100, 'Réduction', true, true, 1),

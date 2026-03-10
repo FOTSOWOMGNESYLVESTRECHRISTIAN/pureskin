@@ -13,6 +13,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     
     List<Product> findByIsActive(Boolean isActive);
     
+    long countByIsActive(boolean isActive);
+    
+    List<Product> findByCategory(String category);
+    
+    List<Product> findByIsPromotional(boolean isPromotional);
+    
     @Query("SELECT p FROM Product p WHERE p.isActive = true AND p.stockQuantity > 0")
     List<Product> findAvailableProducts();
     
