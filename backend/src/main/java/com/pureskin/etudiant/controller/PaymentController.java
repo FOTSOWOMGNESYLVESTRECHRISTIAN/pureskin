@@ -1,11 +1,13 @@
 package com.pureskin.etudiant.controller;
 
+import com.pureskin.etudiant.dto.PaymentRequest;
 import com.pureskin.etudiant.model.Payment;
 import com.pureskin.etudiant.service.PaymentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -20,18 +22,52 @@ public class PaymentController {
     
     // Créer un nouveau paiement
     @PostMapping
-    public ResponseEntity<Payment> createPayment(@RequestBody Payment payment) {
+    public ResponseEntity<?> createPayment(@RequestBody PaymentRequest paymentRequest) {
         try {
+            System.out.println("Received payment request: " + paymentRequest);
+            
+            // Convert DTO to Entity
+            Payment payment = new Payment();
+            payment.setOrderId(paymentRequest.getOrderId());
+            payment.setCustomerName(paymentRequest.getCustomerName());
+            payment.setCustomerEmail(paymentRequest.getCustomerEmail());
+            payment.setCustomerPhone(paymentRequest.getCustomerPhone());
+            payment.setAmount(paymentRequest.getAmount());
+            payment.setCurrency(paymentRequest.getCurrency());
+            payment.setPaymentMethod(paymentRequest.getPaymentMethod());
+            payment.setStatus(paymentRequest.getStatus());
+            payment.setPaymentReference(paymentRequest.getPaymentReference());
+            payment.setFarotyTransactionId(paymentRequest.getFarotyTransactionId());
+            payment.setFarotyWalletId(paymentRequest.getFarotyWalletId());
+            
+            // Set products if provided
+            if (paymentRequest.getProducts() != null) {
+                payment.setProducts(paymentRequest.getProducts());
+            }
+            
+            // Validation des champs requis
+            if (payment.getCustomerEmail() == null || payment.getCustomerEmail().trim().isEmpty()) {
+                throw new IllegalArgumentException("L'email du client est obligatoire");
+            }
+            if (payment.getCustomerName() == null || payment.getCustomerName().trim().isEmpty()) {
+                throw new IllegalArgumentException("Le nom du client est obligatoire");
+            }
+            
             Payment createdPayment = paymentService.createPayment(payment);
             return ResponseEntity.ok(createdPayment);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            System.err.println("Error creating payment: " + e.getMessage());
+            e.printStackTrace();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Failed to create payment");
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
     
     // Mettre à jour le statut d'un paiement
     @PutMapping("/{orderId}/status")
-    public ResponseEntity<Payment> updatePaymentStatus(
+    public ResponseEntity<?> updatePaymentStatus(
             @PathVariable String orderId,
             @RequestBody Map<String, String> request) {
         try {
@@ -41,7 +77,10 @@ public class PaymentController {
             Payment updatedPayment = paymentService.updatePaymentStatus(orderId, status, farotyTransactionId);
             return ResponseEntity.ok(updatedPayment);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Failed to update payment status");
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
     
@@ -83,7 +122,7 @@ public class PaymentController {
     
     // Récupérer les paiements par plage de dates
     @GetMapping("/date-range")
-    public ResponseEntity<List<Payment>> getPaymentsByDateRange(
+    public ResponseEntity<?> getPaymentsByDateRange(
             @RequestParam String startDate,
             @RequestParam String endDate) {
         try {
@@ -92,7 +131,10 @@ public class PaymentController {
             List<Payment> payments = paymentService.getPaymentsByDateRange(start, end);
             return ResponseEntity.ok(payments);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("error", "Invalid date format");
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
     }
     

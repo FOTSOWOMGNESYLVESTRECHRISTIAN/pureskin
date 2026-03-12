@@ -25,6 +25,7 @@ C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\puresk
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\Customer.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\FAQ.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\AdminDebugController.java
+C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\dto\PaymentRequest.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\repository\LoyaltyProgramRepository.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\TestController.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\BlogController.java
@@ -50,6 +51,7 @@ C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\puresk
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\config\WebConfig.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\repository\RoutineRepository.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\repository\ProductRepository.java
+C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\FarotyController.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\ProductController.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\Routine.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\Payment.java
@@ -69,6 +71,7 @@ C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\puresk
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\DeliveryController.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\repository\OrderItemRepository.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\controller\FarotyWebhookController.java
+C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\service\FarotyService.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\Category.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\model\Testimonial.java
 C:\Users\user\CascadeProjects\pureskin-etudiant\backend\src\main\java\com\pureskin\etudiant\config\JwtTokenProvider.java

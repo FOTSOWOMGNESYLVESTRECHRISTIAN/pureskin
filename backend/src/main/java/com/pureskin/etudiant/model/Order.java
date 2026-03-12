@@ -46,7 +46,7 @@ public class Order {
     private BigDecimal totalAmount;
     
     @Column(name = "currency", nullable = false)
-    private String currency = "EUR";
+    private String currency = "XAF";
     
     @Column(name = "shipping_address")
     private String shippingAddress;

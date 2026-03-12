@@ -26,6 +26,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.status = :status")
     BigDecimal sumAmountByStatus(@Param("status") String status);
     
+    // Somme des montants par statut et plage de dates
+    @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.status = :status AND p.createdAt BETWEEN :startDate AND :endDate")
+    BigDecimal sumAmountByStatusAndDate(@Param("status") String status, @Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
+    
     // Trouver par email client
     List<Payment> findByCustomerEmailOrderByCreatedAtDesc(String customerEmail);
     
@@ -39,16 +43,27 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Query("SELECT p FROM Payment p WHERE p.createdAt BETWEEN :startDate AND :endDate ORDER BY p.createdAt DESC")
     List<Payment> findByDateRange(@Param("startDate") LocalDateTime startDate, @Param("endDate") LocalDateTime endDate);
     
-    // Statistiques générales
+    // Statistiques générales - Version compatible PostgreSQL
     @Query("SELECT " +
            "COUNT(p) as totalTransactions, " +
-           "COUNT(p) FILTER (WHERE p.status = 'SUCCESS') as successfulTransactions, " +
-           "COUNT(p) FILTER (WHERE p.status = 'FAILED') as failedTransactions, " +
-           "COUNT(p) FILTER (WHERE p.status = 'PENDING') as pendingTransactions, " +
+           "SUM(CASE WHEN p.status = 'SUCCESS' THEN 1 ELSE 0 END) as successfulTransactions, " +
+           "SUM(CASE WHEN p.status = 'FAILED' THEN 1 ELSE 0 END) as failedTransactions, " +
+           "SUM(CASE WHEN p.status = 'PENDING' THEN 1 ELSE 0 END) as pendingTransactions, " +
            "COALESCE(SUM(p.amount), 0) as totalRevenue, " +
-           "COALESCE(SUM(p.amount) FILTER (WHERE p.status = 'SUCCESS'), 0) as successfulRevenue " +
+           "COALESCE(SUM(CASE WHEN p.status = 'SUCCESS' THEN p.amount ELSE 0 END), 0) as successfulRevenue " +
            "FROM Payment p")
     Object[] getPaymentStats();
+    
+    // Alternative avec CASE pour plus de compatibilité
+    @Query(value = "SELECT " +
+           "COUNT(*) as totalTransactions, " +
+           "SUM(CASE WHEN status = 'SUCCESS' THEN 1 ELSE 0 END) as successfulTransactions, " +
+           "SUM(CASE WHEN status = 'FAILED' THEN 1 ELSE 0 END) as failedTransactions, " +
+           "SUM(CASE WHEN status = 'PENDING' THEN 1 ELSE 0 END) as pendingTransactions, " +
+           "COALESCE(SUM(amount), 0) as totalRevenue, " +
+           "COALESCE(SUM(CASE WHEN status = 'SUCCESS' THEN amount ELSE 0 END), 0) as successfulRevenue " +
+           "FROM payments", nativeQuery = true)
+    Object[] getPaymentStatsNative();
     
     // Transactions du jour
     @Query("SELECT COUNT(p) FROM Payment p WHERE CAST(p.createdAt AS LocalDate) = CURRENT_DATE")

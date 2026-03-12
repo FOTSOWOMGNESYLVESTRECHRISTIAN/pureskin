@@ -49,21 +49,21 @@ public class Payment {
     @Column(name = "faroty_wallet_id")
     private String farotyWalletId;
     
-    @Column(name = "products", columnDefinition = "jsonb")
+    @Column(name = "products", columnDefinition = "TEXT")
     @Convert(converter = ListConverter.class)
-    private List<Map<String, Object>> products;
+    private List<Map<String, Object>> products = new java.util.ArrayList<>();
     
-    @Column(name = "shipping_address", columnDefinition = "jsonb")
+    @Column(name = "shipping_address", columnDefinition = "TEXT")
     @Convert(converter = MapConverter.class)
-    private Map<String, Object> shippingAddress;
+    private Map<String, Object> shippingAddress = new java.util.HashMap<>();
     
-    @Column(name = "billing_address", columnDefinition = "jsonb")
+    @Column(name = "billing_address", columnDefinition = "TEXT")
     @Convert(converter = MapConverter.class)
-    private Map<String, Object> billingAddress;
+    private Map<String, Object> billingAddress = new java.util.HashMap<>();
     
-    @Column(name = "metadata", columnDefinition = "jsonb")
+    @Column(name = "metadata", columnDefinition = "TEXT")
     @Convert(converter = MapConverter.class)
-    private Map<String, Object> metadata;
+    private Map<String, Object> metadata = new java.util.HashMap<>();
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
